@@ -9,7 +9,15 @@ In this work, we explore the potential of rotation techniques for 2-bit KV quant
 RotateKV achieves less than 0.3 perplexity (PPL) degradation with 2-bit quantization on WikiText-2 using LLaMA-2-13B, maintains strong CoT reasoning and long-context capabilities, with less than 1.7\% degradation on GSM8K, outperforming existing methods even at lower average bit-widths.
 
 ## Reproduce the Evaluation results
-### Cloning the code
+
+### Cloneing the Code
+
+```bash
+git clone https://github.com/ZunhaiSu/RotateKV.git
+conda create -n RotateKV python==3.10
+```
+
+### Installing Dependencies
 
 ### Calibration for the reordering indices
 
