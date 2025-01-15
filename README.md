@@ -33,9 +33,9 @@ conda create -n RotateKV python==3.10
 
 ## Reproducing the Visualizations
 
-### 2D Key Tensors
+### 2D Visualizations of Key Tensors
 
-### 3D Key Tensors
+### 2D Visualizations of Key Tensors
 
 ### Massive Activations
 
