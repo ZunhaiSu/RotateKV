@@ -52,7 +52,7 @@ python PPL_evaluation.py --save_k_pre_rope True
 python PPL_evaluation.py --save_k_post_rope True
 ```
 Next, use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.  
-<img src="figure/1.png" width="300"/>
+<img src="figure/1.png" width="400"/>
 ### 3D Visualizations of Key Tensors
 ```bash
 # generate the key_states
@@ -63,7 +63,7 @@ python PPL_evaluation.py --save_k_post_rope True
 
 ```
 Next, use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.  
-        <img src="figure/2.png" width="250"/>  
+        <img src="figure/2.png" width="300"/>  
 ### Massive Activations
 ```bash
 # generate the sassive activations
