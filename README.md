@@ -8,16 +8,14 @@ In this work, we explore the potential of rotation techniques for 2-bit KV quant
 (iii) Attention-Sink-Aware Quantization, which leverages the massive activations to efficiently protect attention sinks.  
 RotateKV achieves less than 0.3 perplexity (PPL) degradation with 2-bit quantization on WikiText-2 using LLaMA-2-13B, maintains strong CoT reasoning and long-context capabilities, with less than 1.7\% degradation on GSM8K, outperforming existing methods even at lower average bit-widths.
 
-## Reproduce the Evaluation results
-
-### Cloneing the Code
+## Installation
 
 ```bash
 git clone https://github.com/ZunhaiSu/RotateKV.git
 conda create -n RotateKV python==3.10
 ```
 
-### Installing Dependencies
+## Usage
 
 ### Calibration for the reordering indices
 
@@ -31,7 +29,7 @@ conda create -n RotateKV python==3.10
 
 ### Needle-in-a-Haystack Evaluation
 
-## Reproducing the Visualizations
+## Visualization
 
 ### 2D Visualizations of Key Tensors
 
