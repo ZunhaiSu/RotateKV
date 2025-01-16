@@ -43,7 +43,7 @@ pip install -e.
 
 ## Visualization
 
-### 2D Visualizations of key_states
+### 2D Visualizations of Keys
 ```bash
 # generate the key_states
 # pre_RoPE
@@ -51,9 +51,9 @@ python PPL_evaluation.py --save_k_pre_rope True
 # post_RoPE
 python PPL_evaluation.py --save_k_post_rope True
 ```
-Next, use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.  
 <img src="figure/1.png" width="250"/>
-### 3D Visualizations of Key Tensors
+### 3D Visualizations of Keys
 ```bash
 # generate the key_states
 # pre_RoPE
@@ -62,14 +62,14 @@ python PPL_evaluation.py --save_k_pre_rope True
 python PPL_evaluation.py --save_k_post_rope True
 
 ```
-Next, use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.  
         <img src="figure/2.png" width="200"/>  
 ### Massive Activations
 ```bash
 # generate the massive activations
 python PPL_evaluation.py --save_massive_activations True
 ```
-Next, use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.  
 <img src="figure/massive_activation.png" width="200"/>
 ### Attention Sinks
 ```bash
@@ -77,6 +77,6 @@ Next, use `RotateKV/visualize/Massive Activations.ipynb` to generate the followi
 python PPL_evaluation.py --save_attention_scores True
 
 ```
-Next, use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.  
 <img src="figure/3.png" width="200"/>
 ## Citation
