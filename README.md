@@ -66,13 +66,13 @@ python PPL_evaluation.py --RotateKV3 True
 python PPL_evaluation.py --RotateKV4 True
 ```
 ### LongBench Evaluation  
-Please refer to [https://github.com/THUDM/LongBench.git](https://github.com/THUDM/LongBench.git) for testing.
+Please refer to [https://github.com/THUDM/LongBench.git](https://github.com/THUDM/LongBench.git).
 
 ### MileBench Evaluation  
-Please refer to [https://github.com/MileBench/MileBench.git](https://github.com/MileBench/MileBench.git) for testing.
+Please refer to [https://github.com/MileBench/MileBench.git](https://github.com/MileBench/MileBench.git).
 
 ### Needle-in-a-Haystack Evaluation
-Please refer to [https://github.com/FranxYao/Long-Context-Data-Engineering.git](https://github.com/FranxYao/Long-Context-Data-Engineering.git) for testing.
+Please refer to [https://github.com/FranxYao/Long-Context-Data-Engineering.git](https://github.com/FranxYao/Long-Context-Data-Engineering.git).
 
 ## Visualization
 ### 2D Visualizations of Keys
