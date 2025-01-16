@@ -1,0 +1,6 @@
+transformers==4.36.0
+datasets
+accelerate
+numpy==1.26
+SentencePiece
+protobuf
