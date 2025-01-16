@@ -27,7 +27,7 @@ git clone https://github.com/Dao-AILab/fast-hadamard-transform.git
 cd fast-hadamard-transform
 pip install -e.
 ```
-## Usage
+## Evaluation
 
 ### Calibration for the reordering indices
 
