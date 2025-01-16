@@ -38,13 +38,6 @@ python k_reordering_calibration_llama2_7B.py
 ```bash
 # For FP16 baseline.
 python PPL_evaluation.py --FP16 True
-# For Round-To-Nearest results.
-# INT2
-python PPL_evaluation.py --RTN2 True
-# INT3
-python PPL_evaluation.py --RTN3 True
-# INT4
-python PPL_evaluation.py --RTN4 True
 # For RotateKV results
 # INT2
 python PPL_evaluation.py --RotateKV2 True
@@ -59,11 +52,11 @@ python PPL_evaluation.py --RotateKV4 True
 python gsm8k_evaluation.py --FP16 True
 # For RotateKV results
 # INT2
-python PPL_evaluation.py --RotateKV2 True
+python gsm8k_evaluation.py --RotateKV2 True
 # INT3
-python PPL_evaluation.py --RotateKV3 True
+python gsm8k_evaluation.py --RotateKV3 True
 # INT4
-python PPL_evaluation.py --RotateKV4 True
+python gsm8k_evaluation.py --RotateKV4 True
 ```
 ### LongBench Evaluation  
 Please refer to [https://github.com/THUDM/LongBench.git](https://github.com/THUDM/LongBench.git).
