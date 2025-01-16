@@ -17,7 +17,8 @@ conda create -n RotateKV python==3.10 -y
 conda activate RotateKV
 # CUDA 11.8
 conda install pytorch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 pytorch-cuda=11.8 -c pytorch -c nvidia -y
-pip install transformers==4.36
+pip install transformers==4.36 datasets accelerate numpy==1.26 SentencePiece protobuf
+
 git clone https://github.com/ZunhaiSu/RotateKV.git
 
 ```
