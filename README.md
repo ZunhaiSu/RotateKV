@@ -70,7 +70,7 @@ Next, use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generat
 python PPL_evaluation.py --save_massive_activations True
 ```
 Next, use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.  
-<img src="figure/massive_activation.png" width="400"/>
+<img src="figure/massive_activation.png" width="300"/>
 ### Attention Sinks
 ```bash
 # generate the attetnion scores
@@ -78,5 +78,5 @@ python PPL_evaluation.py --save_attention_scores True
 
 ```
 Next, use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.  
-<img src="figure/3.png" width="200"/>
+<img src="figure/3.png" width="300"/>
 ## Citation
