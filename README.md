@@ -1,5 +1,5 @@
 # RotateKV: Accurate and Robust 2-Bit KV Cache Quantization for LLMs via Outlier-Aware Adaptive Rotations
-This repository contains the code used to reproduce the experimental results of RotateKV.
+This repository contains the code used to reproduce the simulation results of RotateKV.
 
 
 ## Abstract
