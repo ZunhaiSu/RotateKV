@@ -1,6 +1,6 @@
 # RotateKV: Accurate and Robust 2-Bit KV Cache Quantization for LLMs via Outlier-Aware Adaptive Rotations
 This repository contains the code used to reproduce the experimental results of RotateKV.
-![main](figure/main.png)
+<img src="figure/4.png" alt="main" width="700"/>
 
 ## Abstract
 In this work, we explore the potential of rotation techniques for 2-bit KV quantization and propose RotateKV, which achieves accurate and robust performance with high compression ratio by incorporating several novel improvements:  
@@ -51,11 +51,8 @@ python PPL_evaluation.py --save_k_pre_rope True
 # post_RoPE
 python PPL_evaluation.py --save_k_post_rope True
 ```
-Next, use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.
-
-
-
-
+Next, use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.  
+<img src="figure/1.png" width="300"/>
 ### 3D Visualizations of Key Tensors
 ```bash
 # generate the key_states
@@ -65,22 +62,21 @@ python PPL_evaluation.py --save_k_pre_rope True
 python PPL_evaluation.py --save_k_post_rope True
 
 ```
-Next, use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.
-
+Next, use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.  
+        <img src="figure/2.png" width="250"/>  
 ### Massive Activations
 ```bash
 # generate the sassive activations
 python PPL_evaluation.py --save_massive_activations True
-
 ```
-Next, use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.
-
+Next, use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.  
+<img src="figure/massive_activation.png" width="400"/>
 ### Attention Sinks
 ```bash
 # generate the attetnion scores
 python PPL_evaluation.py --save_attention_scores True
 
 ```
-Next, use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.
-
+Next, use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.  
+<img src="figure/3.png" width="200"/>
 ## Citation
