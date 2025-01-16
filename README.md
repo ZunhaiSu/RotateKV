@@ -1,6 +1,6 @@
 # RotateKV: Accurate and Robust 2-Bit KV Cache Quantization for LLMs via Outlier-Aware Adaptive Rotations
 This repository contains the code used to reproduce the experimental results of RotateKV.
-<img src="figure/4.png" alt="main" width="700"/>
+
 
 ## Abstract
 In this work, we explore the potential of rotation techniques for 2-bit KV quantization and propose RotateKV, which achieves accurate and robust performance with high compression ratio by incorporating several novel improvements:  
@@ -8,7 +8,7 @@ In this work, we explore the potential of rotation techniques for 2-bit KV quant
 (ii) Pre-RoPE Grouped-Head Rotation, which mitigates the impact of rotary position embedding (RoPE) on rotation and further smooths outliers across heads;  
 (iii) Attention-Sink-Aware Quantization, which leverages the massive activations to efficiently protect attention sinks.  
 RotateKV achieves less than 0.3 perplexity (PPL) degradation with 2-bit quantization on WikiText-2 using LLaMA-2-13B, maintains strong CoT reasoning and long-context capabilities, with less than 1.7\% degradation on GSM8K, outperforming existing methods even at lower average bit-widths.
-
+<img src="figure/4.png" alt="main" width="700"/>
 
 ## Installation
 ```bash
