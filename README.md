@@ -44,11 +44,29 @@ pip install -e.
 ## Visualization
 
 ### 2D Visualizations of Key Tensors
+```bash
+# pre_RoPE
+python PPL_evaluation.py --save_k_pre_rope True
+# post_RoPE
+python PPL_evaluation.py --save_k_post_rope True
 
-### 2D Visualizations of Key Tensors
+```
+### 3D Visualizations of Key Tensors
+```bash
+# pre_RoPE
+python PPL_evaluation.py --save_k_pre_rope True
+# post_RoPE
+python PPL_evaluation.py --save_k_post_rope True
 
+```
 ### Massive Activations
+```bash
+python PPL_evaluation.py --save_massive_activations True
 
+```
 ### Attention Sinks
+```bash
+python PPL_evaluation.py --save_attention_scores True
 
+```
 ## Citation
