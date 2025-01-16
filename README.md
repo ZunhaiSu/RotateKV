@@ -8,7 +8,7 @@ In this work, we explore the potential of rotation techniques for 2-bit KV quant
 (ii) Pre-RoPE Grouped-Head Rotation, which mitigates the impact of rotary position embedding (RoPE) on rotation and further smooths outliers across heads;  
 (iii) Attention-Sink-Aware Quantization, which leverages the massive activations to efficiently protect attention sinks.  
 RotateKV achieves less than 0.3 perplexity (PPL) degradation with 2-bit quantization on WikiText-2 using LLaMA-2-13B, maintains strong CoT reasoning and long-context capabilities, with less than 1.7\% degradation on GSM8K, outperforming existing methods even at lower average bit-widths.  
-<img src="figure/4.png" alt="main" width="700"/>
+<img src="figure/main.png" alt="main" width="700"/>
 
 ## Installation
 ```bash
@@ -52,7 +52,7 @@ python PPL_evaluation.py --save_k_pre_rope True
 python PPL_evaluation.py --save_k_post_rope True
 ```
 Use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.  
-<img src="figure/1.png" width="250"/>
+<img src="figure/2D_Key.png" width="250"/>
 ### 3D Visualizations of Keys
 ```bash
 # generate the key_states
@@ -63,7 +63,7 @@ python PPL_evaluation.py --save_k_post_rope True
 
 ```
 Use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.  
-        <img src="figure/2.png" width="200"/>  
+        <img src="figure/3D_Key.png" width="200"/>  
 ### Massive Activations
 ```bash
 # generate the massive activations
@@ -78,5 +78,5 @@ python PPL_evaluation.py --save_attention_scores True
 
 ```
 Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.  
-<img src="figure/3.png" width="200"/>
+<img src="figure/attention_scores.png" width="200"/>
 ## Citation
