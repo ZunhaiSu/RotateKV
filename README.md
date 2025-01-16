@@ -43,30 +43,44 @@ pip install -e.
 
 ## Visualization
 
-### 2D Visualizations of Key Tensors
+### 2D Visualizations of key_states
 ```bash
+# generate the key_states
 # pre_RoPE
 python PPL_evaluation.py --save_k_pre_rope True
 # post_RoPE
 python PPL_evaluation.py --save_k_post_rope True
-
 ```
+Next, use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.
+
+
+
+
 ### 3D Visualizations of Key Tensors
 ```bash
+# generate the key_states
 # pre_RoPE
 python PPL_evaluation.py --save_k_pre_rope True
 # post_RoPE
 python PPL_evaluation.py --save_k_post_rope True
 
 ```
+Next, use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.
+
 ### Massive Activations
 ```bash
+# generate the sassive activations
 python PPL_evaluation.py --save_massive_activations True
 
 ```
+Next, use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.
+
 ### Attention Sinks
 ```bash
+# generate the attetnion scores
 python PPL_evaluation.py --save_attention_scores True
 
 ```
+Next, use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.
+
 ## Citation
