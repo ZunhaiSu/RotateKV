@@ -32,7 +32,7 @@ Simulation results of RotateKV.
 ### Calibration for the reordering indices
 ```bash
 python PPL_evaluation.py --generate_for_calibration True
-python k_reordering_calibration_llama2_7B.py
+python k_reordering_calibration.py
 ```
 ### PPL Evaluation
 ```bash
@@ -59,13 +59,13 @@ python gsm8k_evaluation.py --RotateKV3 True
 python gsm8k_evaluation.py --RotateKV4 True
 ```
 ### LongBench Evaluation  
-Please refer to [https://github.com/THUDM/LongBench.git](https://github.com/THUDM/LongBench.git).
+Please load the model with RotateKV and refer to the [LongBench repository](https://github.com/THUDM/LongBench.git) for conducting the LongBench evaluations.
 
 ### MileBench Evaluation  
-Please refer to [https://github.com/MileBench/MileBench.git](https://github.com/MileBench/MileBench.git).
+Please load the model with RotateKV and refer to the [MileBench repository](https://github.com/MileBench/MileBench.git) for conducting the MileBench evaluations.
 
-### Needle-in-a-Haystack Evaluation
-Please refer to [https://github.com/FranxYao/Long-Context-Data-Engineering.git](https://github.com/FranxYao/Long-Context-Data-Engineering.git).
+### Needle-in-a-Haystack Evaluation  
+Please load the model with RotateKV and refer to the [Long-Context-Data-Engineering](https://github.com/FranxYao/Long-Context-Data-Engineering.git) for conducting the NIAH evaluations.
 
 ## Visualization
 ### 2D Visualizations of Keys
@@ -76,7 +76,7 @@ python PPL_evaluation.py --save_k_pre_rope True
 # post_RoPE
 python PPL_evaluation.py --save_k_post_rope True
 ```
-Use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following 2D visualizations of Keys.  
 <img src="figure/2D_Key.png" width="250"/>
 ### 3D Visualizations of Keys
 ```bash
@@ -87,14 +87,14 @@ python PPL_evaluation.py --save_k_pre_rope True
 python PPL_evaluation.py --save_k_post_rope True
 
 ```
-Use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following 3D visualizations of Keys.  
         <img src="figure/3D_Key.png" width="200"/>  
 ### Massive Activations
 ```bash
 # generate the massive activations
 python PPL_evaluation.py --save_massive_activations True
 ```
-Use `RotateKV/visualize/Massive Activations.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/Massive Activations.ipynb` to generate the following visualizations of massive activations.  
 <img src="figure/massive_activation.png" width="200"/>
 ### Attention Sinks
 ```bash
@@ -102,6 +102,6 @@ Use `RotateKV/visualize/Massive Activations.ipynb` to generate the following fig
 python PPL_evaluation.py --save_attention_scores True
 
 ```
-Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following figure.  
+Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following visualizations of attention sinks.  
 <img src="figure/attention_scores.png" width="200"/>
 ## Citation
