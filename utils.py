@@ -2,13 +2,13 @@ import argparse
 import torch
 import numpy as np
 
-
 def parser_gen():
     parser = argparse.ArgumentParser()
     parser.add_argument('--FP16', action='store', type=bool, default=False)
     parser.add_argument('--RTN2', action='store', type=bool, default=False)
     parser.add_argument('--RTN3', action='store', type=bool, default=False)
     parser.add_argument('--RTN4', action='store', type=bool, default=False)
+    parser.add_argument('--fuse_weights', action='store', type=bool, default=False)
     parser.add_argument('--RotateKV2', action='store', type=bool, default=False)
     parser.add_argument('--RotateKV3', action='store', type=bool, default=False)
     parser.add_argument('--RotateKV4', action='store', type=bool, default=False)
@@ -16,7 +16,6 @@ def parser_gen():
     parser.add_argument('--generate_for_calibration', action='store', type=bool, default=False)
     parser.add_argument('--Grouped_Head_Key_Rotation', action='store', type=bool, default=False)   
     parser.add_argument('--Outlier_Aware_Key_Rotation', action='store', type=bool, default=False)   
-    parser.add_argument('--Value_Rotation', action='store', type=bool, default=False)   
     parser.add_argument('--Attention_Sink_Aware', action='store', type=bool, default=False)   
     
     parser.add_argument('--save_attention_scores', action='store', type=bool, default=False)
@@ -24,11 +23,11 @@ def parser_gen():
     parser.add_argument('--save_k_post_rope', action='store', type=bool, default=False)
     parser.add_argument('--save_massive_activations', action='store', type=bool, default=False)
 
-    parser.add_argument('--RotateKV', action='store', type=bool, default=False)
     # General Arguments
-    parser.add_argument('--model', type=str, default='llama2-7B', choices=["llama2-7B"])
+    parser.add_argument('--model', type=str, default='llama2_7b', choices=["llama2_7b", "llama2_13b", "llama3_8b", "llama2_7b_80K", "mistral_7b"])
     parser.add_argument('--PPL_seq_length', type=int, default=4096, choices=[2048,4096])
     parser.add_argument('--attn_implementation', type=str, default="eager", choices=["flash_attention_2", "eager", "sdpa"])
+    parser.add_argument('--use_safetensors', action='store', type=bool, default=False)
     
     # KV-Cache Quantization Arguments
     parser.add_argument('--k_bits', type=int, default=2)
@@ -44,19 +43,25 @@ def parser_gen():
 
     args = parser.parse_args()
     if args.save_attention_scores or args.save_k_pre_rope or args.save_k_post_rope or args.save_massive_activations:
+        if not os.path.exists("./save_tensors"):
+            os.makedirs("./save_tensors")
         args.FP16 = True
         args.model = "llama2-7B"
         args.attn_implementation = "eager"
         args.PPL_seq_length= 4096
     if args.generate_for_calibration:
+        if not os.path.exists("./save_tensors/calibration_tensors"):
+            os.makedirs("./save_tensors/calibration_tensors")
         args.attn_implementation = "eager"
         args.Grouped_Head_Key_Rotation = True
         args.head_group_num = 4
+        args.PPL_seq_length= 4096
     if args.RotateKV2 or args.RotateKV3 or args.RotateKV4:
         args.attn_implementation = "flash_attention_2"
+        args.head_group_num = 4
+        args.fuse_weights = True        
         args.Grouped_Head_Key_Rotation = True
         args.Outlier_Aware_Key_Rotation = True
-        args.Value_Rotation = True
         args.Attention_Sink_Aware = True    
         if args.RotateKV2:
             args.k_bits = 2

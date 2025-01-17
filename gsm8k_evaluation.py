@@ -7,6 +7,7 @@ from tqdm import tqdm
 from RotateKV_fake_quant.modeling_llama_RotateKV import LlamaForCausalLM_RotateKV
 from transformers import LlamaForCausalLM, LlamaTokenizer, AutoTokenizer
 import utils
+from fuse_weights import fuse_weights
 from gsm8k_utils import download_url, load_jsonl
 import argparse
 import warnings
@@ -217,30 +218,40 @@ def seed_everything(seed: int):
     torch.backends.cudnn.benchmark = True
 
 
-def load(FP16):
+def load(args):
+    model_paths = {
+        "llama2_7b": "/root/autodl-tmp/Llama-2-7b-hf",
+        "llama2_7b_80K": "your_path_for_llama2_7b_80K",
+        "llama2_13b": "your_path_for_llama2_13b",
+        "llama3_8b": "your_path_for_llama3_8b",
+        "mistral_7b": "your_path_for_mistral_7b"
+    }
+    model_path = model_paths.get(args.model, "default_path")
     tokenizer = AutoTokenizer.from_pretrained(
-        "/root/autodl-tmp/Llama-2-7b-hf",
+        model_path,
         trust_remote_code=True)
-    if FP16:
+    if args.FP16:
         model = LlamaForCausalLM.from_pretrained(
-            "/root/autodl-tmp/Llama-2-7b-hf",
+            model_path,
             device_map="auto",
             torch_dtype=torch.float16,
-            trust_remote_code=True,attn_implementation="flash_attention_2", use_safetensors=False
+            trust_remote_code=True, attn_implementation="flash_attention_2", use_safetensors=False
         )
     else:
         model = LlamaForCausalLM_RotateKV.from_pretrained(
-            "/root/autodl-tmp/Llama-2-7b-hf",
+            model_path,
             device_map="auto",
             torch_dtype=torch.float16,
-            trust_remote_code=True,attn_implementation="flash_attention_2", use_safetensors=False
+            trust_remote_code=True,attn_implementation=args.attn_implementation, use_safetensors=args.use_safetensors
         )
     if tokenizer.pad_token_id is None:
         if tokenizer.eos_token_id is not None:
             tokenizer.pad_token_id = tokenizer.eos_token_id
         else:
             tokenizer.pad_token_id = 0
-
+            
+    if args.fuse_weights:
+        fuse_weights(model)
     model.eval()
 
     return model, tokenizer
@@ -289,7 +300,7 @@ def main():
 
     list_data_dict = load_jsonl(test_filepath, instruction="question", output="answer")
 
-    model, tokenizer = load(args.FP16)
+    model, tokenizer = load(args)
 
     answers = []
     for sample in tqdm(list_data_dict):
