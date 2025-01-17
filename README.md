@@ -46,7 +46,6 @@ python PPL_evaluation.py --RotateKV3 True
 # INT4
 python PPL_evaluation.py --RotateKV4 True
 ```
-Code inspired by [[QuaRot](https://github.com/spcl/QuaRot).
 ### GSM8K Evaluation
 ```bash
 # For FP16 baseline.
