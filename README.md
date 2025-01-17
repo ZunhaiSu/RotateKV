@@ -104,4 +104,13 @@ python PPL_evaluation.py --save_attention_scores True
 ```
 Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following visualizations of attention sinks.  
 <img src="figure/attn_weights_layer_11_head0.png" width="200"/><img src="figure/attn_weights_layer_11_head1.png" width="200"/><img src="figure/attn_weights_layer_11_head2.png" width="200"/><img src="figure/attn_weights_layer_11_head3.png" width="200"/>
+## Reference Projects
+
+1. [QuaRot - SPCL](https://github.com/spcl/QuaRot/activity)
+2. [SpinQuant - Facebook Research](https://github.com/facebookresearch/SpinQuant)
+3. [Fast Hadamard Transform - Dao-AILab](https://github.com/Dao-AILab/fast-hadamard-transform)
+4. [GSM8K Evaluation - Guangxuan Xiao](https://github.com/Guangxuan-Xiao/GSM8K-eval)
+
+
+
 ## Citation
