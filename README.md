@@ -8,7 +8,7 @@ In this work, we explore the potential of rotation techniques for 2-bit KV quant
 (ii) Pre-RoPE Grouped-Head Rotation, which mitigates the impact of rotary position embedding (RoPE) on rotation and further smooths outliers across heads;  
 (iii) Attention-Sink-Aware Quantization, which leverages the massive activations to efficiently protect attention sinks.  
 RotateKV achieves less than 0.3 perplexity (PPL) degradation with 2-bit quantization on WikiText-2 using LLaMA-2-13B, maintains strong CoT reasoning and long-context capabilities, with less than 1.7\% degradation on GSM8K, outperforming existing methods even at lower average bit-widths.  
-<img src="figure/main.png" alt="main" width="700"/>
+<img src="figure/main.png" alt="main" width="800"/>
 
 ## Installation
 ```bash
@@ -59,10 +59,10 @@ python gsm8k_evaluation.py --RotateKV3 True
 python gsm8k_evaluation.py --RotateKV4 True
 ```
 ### LongBench Evaluation  
-Please load the model with RotateKV and refer to the [LongBench repository](https://github.com/THUDM/LongBench.git) for conducting the LongBench evaluations.
+Please load the model with RotateKV and refer to the [LongBench](https://github.com/THUDM/LongBench.git) for conducting the LongBench evaluations.
 
 ### MileBench Evaluation  
-Please load the model with RotateKV and refer to the [MileBench repository](https://github.com/MileBench/MileBench.git) for conducting the MileBench evaluations.
+Please load the model with RotateKV and refer to the [MileBench](https://github.com/MileBench/MileBench.git) for conducting the MileBench evaluations.
 
 ### Needle-in-a-Haystack Evaluation  
 Please load the model with RotateKV and refer to the [Long-Context-Data-Engineering](https://github.com/FranxYao/Long-Context-Data-Engineering.git) for conducting the NIAH evaluations.
@@ -77,7 +77,7 @@ python PPL_evaluation.py --save_k_pre_rope True
 python PPL_evaluation.py --save_k_post_rope True
 ```
 Use `RotateKV/visualize/2D Visualizations of Key Tensors.ipynb` to generate the following 2D visualizations of Keys.  
-<img src="figure/2D_Key.png" width="250"/>
+<img src="figure/2D_key.png" width="400"/>
 ### 3D Visualizations of Keys
 ```bash
 # generate the key_states
@@ -88,7 +88,7 @@ python PPL_evaluation.py --save_k_post_rope True
 
 ```
 Use `RotateKV/visualize/3D Visualizations of Key Tensors.ipynb` to generate the following 3D visualizations of Keys.  
-        <img src="figure/3D_Key.png" width="200"/>  
+<img src="figure/Llama-2-7B Layer 10 Head 1 Key States.png" width="200"/><img src="figure/Llama-2-7B Layer 10 Head 2 Key States.png" width="200"/><img src="figure/Llama-2-7B Layer 10 Head 30 Key States.png" width="200"/><img src="figure/Llama-2-7B Layer 10 Head 31 Key States.png" width="200"/>
 ### Massive Activations
 ```bash
 # generate the massive activations
@@ -103,5 +103,5 @@ python PPL_evaluation.py --save_attention_scores True
 
 ```
 Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following visualizations of attention sinks.  
-<img src="figure/attention_scores.png" width="200"/>
+<img src="figure/attn_weights_layer_11_head0.png" width="200"/><img src="figure/attn_weights_layer_11_head1.png" width="200"/><img src="figure/attn_weights_layer_11_head2.png" width="200"/><img src="figure/attn_weights_layer_11_head3.png" width="200"/>
 ## Citation
