@@ -19,10 +19,8 @@
 # limitations under the License.
 """ PyTorch LLaMA model."""
 
-
-
-# ↓ RotateKV-------------------------------------------------------#
 ### RotateKV baesd on HuggingFace transformers
+# ↓ RotateKV-------------------------------------------------------#
 from fast_hadamard_transform import hadamard_transform
 import utils
 args = utils.parser_gen()
@@ -249,7 +247,7 @@ def apply_rotary_pos_emb(q, k, cos, sin, position_ids, unsqueeze_dim=1):
 
 
 
-# ↓ RotateKV-------------------------------------------------------#
+# ↓ RotateKV RoPE-------------------------------------------------------#
 def apply_rotary_pos_emb_k(k, cos, sin, position_ids, unsqueeze_dim=1):
     position_ids_all = torch.arange(position_ids[0,-1] + 1).unsqueeze(0).to(position_ids.device)
     cos = cos[position_ids_all].unsqueeze(unsqueeze_dim)
@@ -313,7 +311,7 @@ def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
 
 class LlamaAttention(nn.Module):
     """Multi-headed attention from 'Attention Is All You Need' paper"""
-# ↓ RotateKV-------------------------------------------------------#
+# ↓ RotateKV obtain sample_idx-------------------------------------------------------#
     num_of_samples = -1
     num_of_global_layer = 0
     
@@ -343,7 +341,6 @@ class LlamaAttention(nn.Module):
         self.max_position_embeddings = config.max_position_embeddings
         self.rope_theta = config.rope_theta
         self.is_causal = True
-
         if (self.head_dim * self.num_heads) != self.hidden_size:
             raise ValueError(
                 f"hidden_size must be divisible by num_heads (got `hidden_size`: {self.hidden_size}"
@@ -448,11 +445,11 @@ class LlamaAttention(nn.Module):
             key_states = key_states.reshape(bsz, q_len,self.num_key_value_heads,self.head_dim).transpose(1, 2) 
 
         if args.generate_for_calibration:
-            torch.save(key_states, f'/root/RotateKV/save_tensors/calibration_tensors/sample_num{sample_num}_layer_idx{self.layer_idx}.pt')
+            torch.save(key_states, f'./save_tensors/calibration_tensors_{args.model}/sample_num{sample_num}_layer_idx{self.layer_idx}.pt')
             
         if args.save_k_pre_rope:
             if self.layer_idx == 11 and sample_num == 82:
-                torch.save(key_states, f"/root/visualize/RotateKV/save_tensors/key_states_pre_rope_layer_{self.layer_idx}_sample_{sample_num}.pt")
+                torch.save(key_states, f"./save_tensors/key_states_pre_rope_layer_{self.layer_idx}_sample_{sample_num}.pt")
                 
 # ↑ RotateKV-------------------------------------------------------#
         # RoPE
@@ -461,7 +458,7 @@ class LlamaAttention(nn.Module):
 # ↓ RotateKV-------------------------------------------------------#
         if args.save_k_post_rope:
             if self.layer_idx == 11 and sample_num == 82:
-                torch.save(key_states, f"/root/visualize/RotateKV/save_tensors/key_states_post_rope_layer_{self.layer_idx}_sample_{sample_num}.pt")
+                torch.save(key_states, f"./save_tensors/key_states_post_rope_layer_{self.layer_idx}_sample_{sample_num}.pt")
 
         if not args.FP16:
             # fake_quant
@@ -498,8 +495,7 @@ class LlamaAttention(nn.Module):
 # ↓ RotateKV-------------------------------------------------------#
         if args.save_attention_scores:
             if self.layer_idx == 11 and sample_num == 82:
-                torch.save(attn_weights, f"/root/visualize/RotateKV/save_tensors/attn_weights_layer_{self.layer_idx}_sample_{sample_num}.pt")
-                print("save_attention_scores")
+                torch.save(attn_weights, f"./save_tensors/attn_weights_layer_{self.layer_idx}_sample_{sample_num}.pt")
 # ↑ RotateKV-------------------------------------------------------#       
 
         attn_weights = nn.functional.dropout(attn_weights, p=self.attention_dropout, training=self.training)
@@ -557,7 +553,10 @@ class LlamaFlashAttention2(LlamaAttention):
         self,
         hidden_states: torch.Tensor,
         attention_mask: Optional[torch.LongTensor] = None,
+# ↓ RotateKV-------------------------------------------------------#
         pivot_index_list=None,
+        indices_k=None,
+# ↑ RotateKV-------------------------------------------------------#  
         position_ids: Optional[torch.LongTensor] = None,
         past_key_value: Optional[Cache] = None,
         output_attentions: bool = False,
@@ -594,33 +593,21 @@ class LlamaFlashAttention2(LlamaAttention):
         cos, sin = self.rotary_emb(value_states, seq_len=kv_seq_len)
 # ↓ RotateKV-------------------------------------------------------#
         sample_num ,_ = self.__class__.ppl_evaluater_get_sample_num()
-        # if args.RotateKV:
-            # if self.layer_idx == 10:
-            #     torch.save(key_states, "/root/visualize/layer_10_key_states_origin.pt")
-        if args.Grouped_Head_Key_Rotation:
-            dtype = query_states.dtype
-            key_states = key_states.transpose(1, 2).reshape(bsz, q_len, self.num_key_value_heads // args.head_group_num, self.head_dim * args.head_group_num) 
-            key_states = hadamard_transform(key_states.float(), scale=1/math.sqrt(key_states.shape[-1])).to(dtype)
-            key_states = key_states.reshape(bsz, q_len,self.num_key_value_heads,self.head_dim).transpose(1, 2) 
+        # if args.Grouped_Head_Key_Rotation:
+        #     dtype = query_states.dtype
+        #     key_states = key_states.transpose(1, 2).reshape(bsz, q_len, self.num_key_value_heads // args.head_group_num, self.head_dim * args.head_group_num) 
+        #     key_states = hadamard_transform(key_states.float(), scale=1/math.sqrt(key_states.shape[-1])).to(dtype)
+        #     key_states = key_states.reshape(bsz, q_len,self.num_key_value_heads,self.head_dim).transpose(1, 2) 
                 
-        if args.Outlier_Aware_Key_Rotation:
-            # k reordering
-            # torch.save(key_states, f'/root/autodl-tmp/calibration_tensor/iter_num{iter_num}_layer_idx{self.layer_idx}.pt')
-            # print(f"iter_num{iter_num}_layer_idx{self.layer_idx}")
-            indices_k = torch.load(f"/root/RotateKV/reordering_indices_llama2_7B/layer_num_{self.layer_idx}.pt").to(key_states.device)
-            indices_k_repeat = indices_k.repeat([bsz,q_len,1])
+        # if args.Outlier_Aware_Key_Rotation:
+        #     indices_k = torch.load(f"./reordering_indices/reordering_indices_{args.model}.pt")[self.layer_idx,:].to(key_states.device)
+        #     indices_k_repeat = indices_k.repeat([bsz,q_len,1])
             
-            key_states = key_states.transpose(1, 2).reshape(bsz, q_len, self.num_key_value_heads*self.head_dim)  
-            key_states = torch.gather(key_states, -1, indices_k_repeat)
-            key_states = key_states.reshape(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
-            # if self.layer_idx == 10:
-            #     torch.save(key_states, "/root/visualize/layer_10_key_states_RotateKV.pt")
-            # v rotation
-        if args.Value_Rotation:
-            value_states = hadamard_transform(value_states.float(), scale=1/math.sqrt(key_states.shape[-1])).to(dtype) 
-
+        #     key_states = key_states.transpose(1, 2).reshape(bsz, q_len, self.num_key_value_heads*self.head_dim)  
+        #     key_states = torch.gather(key_states, -1, indices_k_repeat)
+        #     key_states = key_states.reshape(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+            
             # kv quant
-            # 当前输入的部分可以用fp16送入后面 之前的只能用量化的结果
         PIVOT_TOKEN = 0
         if args.Attention_Sink_Aware:
             (bsz_here, head_num_here, seq_len_here, head_dim_here) = key_states.shape
@@ -636,7 +623,6 @@ class LlamaFlashAttention2(LlamaAttention):
             # quant
             QUANT_INDEX = torch.tensor(QUANT_INDEX)
             indices_2 = torch.where(QUANT_INDEX == 2)[0].tolist()
-            # indices_4 = torch.where(QUANT_INDEX == 4)[0].tolist()
             if is_prefill:
                 value_states[batch_idx,:,indices_2,:] = fake_quant(value_states[batch_idx,:,indices_2,:], args.v_clip_ratio, args.v_bits, args.v_groupsize)
                 key_states[batch_idx,:,indices_2,:] = fake_quant(key_states[batch_idx,:,indices_2,:] , args.k_clip_ratio, args.k_bits, args.k_groupsize)
@@ -650,12 +636,10 @@ class LlamaFlashAttention2(LlamaAttention):
             cache_kwargs = {"sin": sin, "cos": cos}  # Specific to RoPE models
             key_states, value_states = past_key_value.update(key_states, value_states, self.layer_idx, cache_kwargs)
 # ↓ RotateKV-------------------------------------------------------#
-        # if args.RotateKV:
-        # if args.quantize_after_compute:
-            # key_states[:,:,-seq_len_here:,:] = key_states_fp16_token_now
-            # value_states[:,:,-seq_len_here:,:] = value_states_fp16_token_now
             # k reordering
         if args.Outlier_Aware_Key_Rotation:
+            # indices_k = torch.load(f"./reordering_indices/reordering_indices_{args.model}.pt")[self.layer_idx,:].to(key_states.device)
+            indices_k = indices_k[self.layer_idx,:].to(key_states.device)
             (bsz_here, head_num_here, seq_here, head_dim_here) = key_states.shape
             key_states = key_states.transpose(1, 2).reshape(bsz_here, seq_here, head_num_here*head_dim_here)                    
             indices_k_repeat = indices_k.repeat([bsz_here,seq_here,1])
@@ -664,20 +648,15 @@ class LlamaFlashAttention2(LlamaAttention):
 
             # k rotation
         if args.Grouped_Head_Key_Rotation:
+            dtype = query_states.dtype
+            (bsz_here, head_num_here, seq_here, head_dim_here) = key_states.shape
             key_states = key_states.transpose(1, 2).reshape(bsz_here, seq_here, head_num_here // args.head_group_num, head_dim_here * args.head_group_num)
             key_states = hadamard_transform(key_states.float(), scale=1/math.sqrt(key_states.shape[-1])).to(dtype)
             key_states = key_states.reshape(bsz_here, seq_here, head_num_here, head_dim_here).transpose(1, 2) 
-
-            # v rotation
-        if args.Value_Rotation:
-            value_states = hadamard_transform(value_states.float(), scale=1/math.sqrt(key_states.shape[-1])).to(dtype)   
         
         # RoPE
         query_states= apply_rotary_pos_emb_q(query_states, cos, sin, position_ids)
         key_states = apply_rotary_pos_emb_k(key_states, cos, sin, position_ids)
-        # if self.layer_idx == 10:
-            # print("Hello")
-            # torch.save(key_states, "/root/visualize/layer_10_key_states_origin_after_rope.pt")
 # ↑ RotateKV-------------------------------------------------------#  
         
         # TODO: These transpose are quite inefficient but Flash Attention requires the layout [batch_size, sequence_length, num_heads, head_dim]. We would need to refactor the KV cache
@@ -913,9 +892,7 @@ class LlamaDecoderLayer(nn.Module):
     def __init__(self, config: LlamaConfig, layer_idx: int):
         super().__init__()
         self.hidden_size = config.hidden_size
-
-        self.self_attn = LLAMA_ATTENTION_CLASSES[config._attn_implementation](config=config, layer_idx=layer_idx)
-
+        self.self_attn = LLAMA_ATTENTION_CLASSES[config._attn_implementation](config=config, layer_idx=layer_idx)   
         self.mlp = LlamaMLP(config)
         self.input_layernorm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
         self.post_attention_layernorm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
@@ -926,6 +903,7 @@ class LlamaDecoderLayer(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
 # ↓ RotateKV-------------------------------------------------------#
         pivot_index_list=None,    
+        indices_k=None,
 # ↑ RotateKV-------------------------------------------------------#  
         position_ids: Optional[torch.LongTensor] = None,
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
@@ -962,6 +940,7 @@ class LlamaDecoderLayer(nn.Module):
             attention_mask=attention_mask,
 # ↓ RotateKV-------------------------------------------------------#
             pivot_index_list=pivot_index_list,    
+            indices_k=indices_k,
 # ↑ RotateKV-------------------------------------------------------#  
             position_ids=position_ids,
             past_key_value=past_key_value,
@@ -1125,8 +1104,7 @@ class LlamaModel(LlamaPreTrainedModel):
     def __init__(self, config: LlamaConfig):
         super().__init__(config)
         self.padding_idx = config.pad_token_id
-        self.vocab_size = config.vocab_size
-
+        self.vocab_size = config.vocab_size 
         self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.padding_idx)
         self.layers = nn.ModuleList(
             [LlamaDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
@@ -1138,6 +1116,9 @@ class LlamaModel(LlamaPreTrainedModel):
         self.gradient_checkpointing = False
         # Initialize weights and apply final processing
         self.post_init()
+# ↓ RotateKV-------------------------------------------------------#
+        self.indices_k = torch.load(f"./reordering_indices/reordering_indices_{args.model}.pt")
+# ↑ RotateKV-------------------------------------------------------#  
 
     def get_input_embeddings(self):
         return self.embed_tokens
@@ -1254,7 +1235,8 @@ class LlamaModel(LlamaPreTrainedModel):
                     hidden_states,
                     attention_mask=attention_mask,
 # ↓ RotateKV-------------------------------------------------------#
-                    pivot_index_list=pivot_index_list,           
+                    pivot_index_list=pivot_index_list,
+                    indices_k=self.indices_k,
 # ↑ RotateKV-------------------------------------------------------#                   
                     position_ids=position_ids,
                     past_key_value=past_key_values,
@@ -1266,7 +1248,7 @@ class LlamaModel(LlamaPreTrainedModel):
 # ↓ RotateKV-------------------------------------------------------#
             if args.save_massive_activations:
                 if layer_idx == 10 and sample_num == 82:
-                    torch.save(hidden_states, "/root/RotateKV/save_tensors/hidden_states_layer_10.pt")
+                    torch.save(hidden_states, f"./save_tensors/hidden_states_layer_{self.layer_idx}_sample_{sample_num}.pt")
 # ↑ RotateKV-------------------------------------------------------#
             if use_cache:
                 next_decoder_cache = layer_outputs[2 if output_attentions else 1]
@@ -1300,7 +1282,6 @@ class LlamaForCausalLM_RotateKV(LlamaPreTrainedModel):
         self.model = LlamaModel(config)
         self.vocab_size = config.vocab_size
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-
         # Initialize weights and apply final processing
         self.post_init()
 
