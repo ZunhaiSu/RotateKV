@@ -31,7 +31,7 @@ pip install -e.
 Simulation results of RotateKV.
 ### Calibration for the reordering indices
 ```bash
-python PPL_evaluation.py --generate_for_calibration True
+python PPL_evaluation.py --generate_for_calibration True --model llama2_7b
 python k_reordering_calibration.py --model llama2_7b
 ```
 ### PPL Evaluation
