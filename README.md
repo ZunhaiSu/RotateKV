@@ -26,6 +26,12 @@ pip install -r requirements.txt
 git clone https://github.com/Dao-AILab/fast-hadamard-transform.git
 cd fast-hadamard-transform
 pip install -e.
+
+# Install the kivi_gemv
+git clone https://github.com/jy-yuan/KIVI.git
+cd KIVI/quant
+pip install -e.
+
 ```
 ## Evaluation
 Simulation results of RotateKV.
@@ -105,11 +111,11 @@ python PPL_evaluation.py --save_attention_scores True
 Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following visualizations of attention sinks.  
 <img src="figure/attn_weights_layer_11_head0.png" width="200"/><img src="figure/attn_weights_layer_11_head1.png" width="200"/><img src="figure/attn_weights_layer_11_head2.png" width="200"/><img src="figure/attn_weights_layer_11_head3.png" width="200"/>
 ## Reference Projects
-
-1. [QuaRot - SPCL](https://github.com/spcl/QuaRot/activity)
-2. [SpinQuant - Facebook Research](https://github.com/facebookresearch/SpinQuant)
-3. [Fast Hadamard Transform - Dao-AILab](https://github.com/Dao-AILab/fast-hadamard-transform)
-4. [GSM8K Evaluation - Guangxuan Xiao](https://github.com/Guangxuan-Xiao/GSM8K-eval)
+1. [KIVI - jy-yuan](https://github.com/jy-yuan/KIVI)
+2. [QuaRot - SPCL](https://github.com/spcl/QuaRot/activity)
+3. [SpinQuant - Facebook Research](https://github.com/facebookresearch/SpinQuant)
+4. [Fast Hadamard Transform - Dao-AILab](https://github.com/Dao-AILab/fast-hadamard-transform)
+5. [GSM8K Evaluation - Guangxuan Xiao](https://github.com/Guangxuan-Xiao/GSM8K-eval)
 
 
 
