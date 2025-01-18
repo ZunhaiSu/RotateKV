@@ -27,11 +27,6 @@ git clone https://github.com/Dao-AILab/fast-hadamard-transform.git
 cd fast-hadamard-transform
 pip install -e.
 
-# Install the kivi_gemv
-git clone https://github.com/jy-yuan/KIVI.git
-cd KIVI/quant
-pip install -e.
-
 ```
 ## Evaluation
 Simulation results of RotateKV.
