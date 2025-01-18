@@ -5,3 +5,4 @@ numpy==1.26
 SentencePiece
 protobuf
 flash-attn
+triton
