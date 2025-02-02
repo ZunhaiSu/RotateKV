@@ -113,4 +113,12 @@ Use `RotateKV/visualize/Attention Sinks.ipynb` to generate the following visuali
 
 
 
-## Citation
+## Citation  
+```bibtex
+@article{su2025rotatekv,
+  title={RotateKV: Accurate and Robust 2-Bit KV Cache Quantization for LLMs via Outlier-Aware Adaptive Rotations},
+  author={Su, Zunhai and Chen, Zhe and Shen, Wang and Wei, Hanyu and Li, Linge and Yu, Huangqi and Yuan, Kehong},
+  journal={arXiv preprint arXiv:2501.16383},
+  year={2025}
+}
+```
